@@ -211,6 +211,7 @@ This guide walks you through deploying a serverless web application on AWS using
 ---
 
 ## **Step 6: Test the Application**
+![Output Image](path/to/your/Screenshot_from_2025-02-01_12-48-09.png)
 
 1. Open the S3 static website endpoint in a browser.
 2. Verify that the frontend can fetch and insert data into DynamoDB via the API Gateway.
