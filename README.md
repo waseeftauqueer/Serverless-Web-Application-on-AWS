@@ -4,7 +4,7 @@
 This guide walks you through deploying a serverless web application on AWS using **S3**, **API Gateway**, **Lambda**, and **DynamoDB**. Serverless computing allows developers to focus on writing code without managing infrastructure, as AWS handles the underlying servers.
 
 ---
-
+![Architecture Diagram](architecture-diagram.png)
 ## **Overview of Services Used**
 
 1. **Amazon S3 (Simple Storage Service)**: Hosts static files (HTML, CSS, JavaScript) for the web application.
