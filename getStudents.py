@@ -1,47 +1,21 @@
-// Add your API endpoint here
-var API_ENDPOINT = "YOUR ENDPOINT";
+import json
+import boto3
 
-// AJAX POST request to save student data
-document.getElementById("savestudent").onclick = function(){
-    var inputData = {
-        "studentid": $('#studentid').val(),
-        "name": $('#name').val(),
-        "class": $('#class').val(),
-        "age": $('#age').val()
-    };
-    $.ajax({
-        url: API_ENDPOINT,
-        type: 'POST',
-        data:  JSON.stringify(inputData),
-        contentType: 'application/json; charset=utf-8',
-        success: function (response) {
-            document.getElementById("studentSaved").innerHTML = "Student Data Saved!";
-        },
-        error: function () {
-            alert("Error saving student data.");
-        }
-    });
-}
+def lambda_handler(event, context):
+    # Initialize a DynamoDB resource object for the specified region
+    dynamodb = boto3.resource('dynamodb', region_name='us-east-2')
 
-// AJAX GET request to retrieve all students
-document.getElementById("getstudents").onclick = function(){  
-    $.ajax({
-        url: API_ENDPOINT,
-        type: 'GET',
-        contentType: 'application/json; charset=utf-8',
-        success: function (response) {
-            $('#studentTable tr').slice(1).remove();
-            jQuery.each(response, function(i, data) {          
-                $("#studentTable").append("<tr> \
-                    <td>" + data['studentid'] + "</td> \
-                    <td>" + data['name'] + "</td> \
-                    <td>" + data['class'] + "</td> \
-                    <td>" + data['age'] + "</td> \
-                    </tr>");
-            });
-        },
-        error: function () {
-            alert("Error retrieving student data.");
-        }
-    });
-}
+    # Select the DynamoDB table named 'studentData'
+    table = dynamodb.Table('studentData')
+
+    # Scan the table to retrieve all items
+    response = table.scan()
+    data = response['Items']
+
+    # If there are more items to scan, continue scanning until all items are retrieved
+    while 'LastEvaluatedKey' in response:
+        response = table.scan(ExclusiveStartKey=response['LastEvaluatedKey'])
+        data.extend(response['Items'])
+
+    # Return the retrieved data
+    return data
